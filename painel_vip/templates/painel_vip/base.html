@@ -1,0 +1,198 @@
+{% load static %}
+{% load shadcn %}
+{% comment %}
+  Base do Painel VIP. No projeto, crie templates/base.html assim:
+
+    {% extends "painel_vip/base.html" %}
+    {% block marca_nome %}Meu<br>Sistema{% endblock %}
+    {% block menu %} ...links do menu... {% endblock %}
+
+  e faça as telas estenderem "base.html" como de costume.
+  Os links {% url %} abaixo usam "as": se a rota não existir, não dá erro.
+{% endcomment %}
+{% url 'inicio' as inicio_url %}
+{% url 'logout' as logout_url %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Painel{% endblock %}</title>
+  <link rel="icon" href="{% block favicon %}{% static 'painel_vip/img/favicon.png' %}{% endblock %}" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'painel_vip/css/shadcn.css' %}">
+  <link rel="stylesheet" href="{% static 'painel_vip/css/painel.css' %}">
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem("theme") === "dark") {
+          document.documentElement.classList.add("dark");
+        }
+        if (localStorage.getItem("menu") === "recolhido") {
+          document.documentElement.classList.add("menu-recolhido");
+        }
+      } catch (erro) { /* sem armazenamento */ }
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      future: { hoverOnlyWhenSupported: true },
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Source Sans 3"', "ui-sans-serif", "system-ui", "sans-serif"],
+            display: ['"Source Sans 3"', "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          colors: {
+            border: "hsl(var(--border))",
+            input: "hsl(var(--input))",
+            ring: "hsl(var(--ring))",
+            background: "hsl(var(--background))",
+            foreground: "hsl(var(--foreground))",
+            primary: { DEFAULT: "hsl(var(--primary))", foreground: "hsl(var(--primary-foreground))" },
+            secondary: { DEFAULT: "hsl(var(--secondary))", foreground: "hsl(var(--secondary-foreground))" },
+            destructive: { DEFAULT: "hsl(var(--destructive))", foreground: "hsl(var(--destructive-foreground))" },
+            success: { DEFAULT: "hsl(var(--success))", foreground: "hsl(var(--success-foreground))" },
+            warning: { DEFAULT: "hsl(var(--warning))", foreground: "hsl(var(--warning-foreground))" },
+            info: { DEFAULT: "hsl(var(--info))", foreground: "hsl(var(--info-foreground))" },
+            muted: { DEFAULT: "hsl(var(--muted))", foreground: "hsl(var(--muted-foreground))" },
+            accent: { DEFAULT: "hsl(var(--accent))", foreground: "hsl(var(--accent-foreground))" },
+            popover: { DEFAULT: "hsl(var(--popover))", foreground: "hsl(var(--popover-foreground))" },
+            card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
+          },
+          borderRadius: {
+            lg: "var(--radius)",
+            md: "calc(var(--radius) - 2px)",
+            sm: "calc(var(--radius) - 4px)",
+          },
+        },
+      },
+    };
+  </script>
+  {% block head %}{% endblock %}
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+  {% block layout %}
+    {% if user.is_authenticated %}
+    <div class="app-shell">
+      <div class="topo-celular">
+        <a href="{{ inicio_url|default:'/' }}" aria-label="Início"><img src="{% static 'painel_vip/img/logo-vip.png' %}" alt="Logo"></a>
+        <button type="button" id="menu-abrir" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-lateral-caixa">
+          <i data-lucide="menu" class="size-5"></i>
+        </button>
+      </div>
+      <div class="menu-fundo" id="menu-fundo"></div>
+
+      <aside class="lateral" id="menu-lateral-caixa" aria-label="Menu">
+        <div class="lateral-in">
+          <a class="marca" href="{{ inicio_url|default:'/' }}">
+            <img src="{% static 'painel_vip/img/logo-vip.png' %}" alt="Logo">
+            <span>{% block marca_nome %}Painel<br>VIP{% endblock %}</span>
+          </a>
+
+          <nav class="menu" id="menu-lateral" aria-label="Principal">
+            <span class="menu-indicador" id="menu-indicador" aria-hidden="true"></span>
+            {% block menu %}
+              {% comment %}
+                Cada item do menu segue este formato. O aria-current="page" marca a tela aberta.
+                <div class="grupo-menu">Painéis</div>
+                <a href="{% url 'inicio' %}" data-nome="Início" {% if request.resolver_match.url_name == 'inicio' %}aria-current="page"{% endif %}>
+                  <i data-lucide="home"></i><span class="rot">Início</span>
+                </a>
+              {% endcomment %}
+              <div class="grupo-menu">Painéis</div>
+              <a href="{{ inicio_url|default:'/' }}" data-nome="Início" aria-current="page">
+                <i data-lucide="home"></i><span class="rot">Início</span>
+              </a>
+            {% endblock %}
+          </nav>
+
+          <div class="rodape-menu">
+            <button type="button" onclick="toggleTheme()" data-nome="Trocar tema">
+              <i data-lucide="moon" class="dark:hidden"></i><i data-lucide="sun" class="hidden dark:inline"></i>
+              <span class="rot"><span class="tema-escuro">Tema escuro</span><span class="tema-claro">Tema claro</span></span>
+            </button>
+            <button type="button" id="menu-recolher" data-nome="Recolher menu" aria-label="Recolher menu" aria-expanded="true">
+              <i data-lucide="chevrons-left"></i><span class="rot">Recolher menu</span>
+            </button>
+            {% block conta %}
+            <div class="conta">
+              <span class="avatar" aria-hidden="true">{{ user.get_short_name|default:user.username|slice:":2"|upper }}</span>
+              <div class="nome">
+                <span title="{{ user.get_full_name|default:user.username }}">{{ user.get_full_name|default:user.username }}</span>
+                {% if logout_url %}
+                <form method="post" action="{{ logout_url }}">
+                  {% csrf_token %}
+                  <button type="submit">Sair</button>
+                </form>
+                {% endif %}
+              </div>
+            </div>
+            {% endblock %}
+          </div>
+        </div>
+      </aside>
+    {% endif %}
+
+    <div class="page-main flex min-h-screen min-w-0 flex-1 flex-col overflow-x-hidden">
+      {% block body %}{% endblock %}
+    </div>
+
+    {% if user.is_authenticated %}
+    </div>
+    {% endif %}
+  {% endblock %}
+
+  <div data-slot="toast-viewport" data-shadcn-toast-viewport data-position="top-right">
+    {% for message in messages %}
+      {% if 'success' in message.tags %}
+        {% toast variant="success" duration="5000" %}{% toast_title %}Sucesso{% endtoast_title %}{% toast_description %}{{ message }}{% endtoast_description %}{% endtoast %}
+      {% elif 'error' in message.tags %}
+        {% toast variant="destructive" duration="5000" %}{% toast_title %}Atenção{% endtoast_title %}{% toast_description %}{{ message }}{% endtoast_description %}{% endtoast %}
+      {% elif 'warning' in message.tags %}
+        {% toast variant="warning" duration="5000" %}{% toast_title %}Aviso{% endtoast_title %}{% toast_description %}{{ message }}{% endtoast_description %}{% endtoast %}
+      {% else %}
+        {% toast variant="info" duration="5000" %}{% toast_title %}Info{% endtoast_title %}{% toast_description %}{{ message }}{% endtoast_description %}{% endtoast %}
+      {% endif %}
+    {% endfor %}
+  </div>
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle("dark");
+      try { localStorage.setItem("theme", isDark ? "dark" : "light"); } catch (erro) { /* sem armazenamento */ }
+      if (window.lucide) window.lucide.createIcons({ icons: window.lucide.icons });
+    }
+  </script>
+  {% block scripts %}{% endblock %}
+  <script src="{% static 'django_shadcn/js/shadcn.js' %}"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>
+    if (window.lucide && window.lucide.icons) {
+      window.lucide.createIcons({ icons: window.lucide.icons });
+    }
+    const closeOpenDropdowns = (event) => {
+      document.querySelectorAll("details[data-shadcn-dropdown][open]").forEach((dropdown) => {
+        if (!dropdown.contains(event.target)) dropdown.open = false;
+      });
+    };
+    document.addEventListener("pointerdown", closeOpenDropdowns);
+    document.addEventListener("click", closeOpenDropdowns);
+    // Painel pela esquerda: <button data-gaveta-abrir="id-do-dialog"> abre <dialog class="gaveta-dlg" id="...">
+    document.querySelectorAll("[data-gaveta-abrir]").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        const dlg = document.getElementById(botao.getAttribute("data-gaveta-abrir"));
+        if (dlg && dlg.showModal) dlg.showModal();
+      });
+    });
+    document.querySelectorAll("dialog.gaveta-dlg").forEach((dlg) => {
+      dlg.addEventListener("click", (evento) => { if (evento.target === dlg) dlg.close(); });
+      dlg.querySelectorAll("[data-gaveta-fechar]").forEach((b) => b.addEventListener("click", () => dlg.close()));
+    });
+  </script>
+  <script src="{% static 'painel_vip/js/painel.js' %}"></script>
+</body>
+</html>

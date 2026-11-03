@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "painel-vip"
+version = "0.1.0"
+description = "Modelo visual do painel VIP para projetos Django: menu lateral preto, cards, filtros, quadros, tabelas e painel pela esquerda."
+readme = "README.md"
+requires-python = ">=3.10"
+# Os componentes {% button %}, {% label %} e os toasts vêm do django-shadcn
+# (biblioteca-identidade-visual do Leandro). Ele é instalado à parte: veja o README.
+dependencies = ["Django>=4.2"]
+
+[tool.setuptools.packages.find]
+include = ["painel_vip*"]
+
+[tool.setuptools.package-data]
+painel_vip = ["static/**/*", "templates/**/*"]

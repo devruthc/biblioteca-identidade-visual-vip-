@@ -1,0 +1,259 @@
+{% extends "painel_vip/base.html" %}
+{% load shadcn %}
+{% comment %}
+  Tela de exemplo com todas as peças do Painel VIP. Copie o bloco que precisar.
+  Os números são fixos, só para mostrar o visual.
+  exemplo/gerar.py transforma esta tela em exemplo/index.html (abre direto no navegador).
+{% endcomment %}
+
+{% block title %}Exemplo · Painel VIP{% endblock %}
+
+{% block body %}
+<section class="p-pagina">
+
+  {# ===== 1. Topo: migalha, título, subtítulo e botão à direita ===== #}
+  <div class="p-topo" data-anim>
+    <div>
+      <div class="p-migalha"><a href="#">Início</a><span>/</span><span>Exemplo</span></div>
+      <h1>Exemplo</h1>
+      <p class="p-sub">Todas as peças do modelo numa tela só. Copie o bloco que precisar.</p>
+    </div>
+    <button type="button" class="{% shadcn_class 'button' %} h-10 px-5">
+      <i data-lucide="plus" class="size-4"></i>
+      Novo cadastro
+    </button>
+  </div>
+
+  {# ===== 2. Abas entre telas irmãs ===== #}
+  <nav class="abas" aria-label="Telas" data-anim>
+    <a href="#" aria-current="page"><i data-lucide="layout-dashboard"></i>Resumo</a>
+    <a href="#"><i data-lucide="list-ordered"></i>Fila<span class="cont">12</span></a>
+    <a href="#"><i data-lucide="list"></i>Todos</a>
+  </nav>
+
+  {# ===== 3. Cards de número (kpis2, kpis3, kpis4 ou kpis6) ===== #}
+  <div class="kpis4">
+    <div class="kpc" data-anim>
+      <i data-lucide="share-2" class="kpc-ico"></i>
+      <p class="kpc-r">Card simples</p>
+      <p class="kpc-v js-contar">1.234</p>
+      <p class="kpc-p">Texto de apoio embaixo do número</p>
+    </div>
+    <a href="#" class="kpc" data-anim>
+      <i data-lucide="badge-check" class="kpc-ico"></i>
+      <p class="kpc-r">Card clicável</p>
+      <p class="kpc-v js-contar">186</p>
+      <p class="kpc-p">Levanta ao passar o mouse</p>
+      <i data-lucide="arrow-right" class="kpc-ir"></i>
+    </a>
+    <div class="kpc dest" data-anim>
+      <i data-lucide="percent" class="kpc-ico"></i>
+      <p class="kpc-r">Card em destaque (verde)</p>
+      <p class="kpc-v js-contar">64,6%</p>
+      <p class="kpc-p">Com barra de progresso</p>
+      <div class="barra"><i style="--w:64.6%"></i></div>
+    </div>
+    <div class="kpc alerta" data-anim>
+      <i data-lucide="alarm-clock" class="kpc-ico"></i>
+      <p class="kpc-r">Card de alerta (amarelo)</p>
+      <p class="kpc-v js-contar">7</p>
+      <p class="kpc-p">Pede atenção</p>
+    </div>
+  </div>
+
+  {# ===== 4. Filtros ===== #}
+  <form method="get" class="p-filtros sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.5fr_1fr_auto]" data-anim>
+    <div class="space-y-1.5">
+      {% label for_id="data_inicio" %}Data início{% endlabel %}
+      <input type="date" id="data_inicio" name="data_inicio" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
+    </div>
+    <div class="space-y-1.5">
+      {% label for_id="data_fim" %}Data fim{% endlabel %}
+      <input type="date" id="data_fim" name="data_fim" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
+    </div>
+    <div class="space-y-1.5">
+      {% label for_id="nome" %}Nome{% endlabel %}
+      <div class="relative">
+        <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"></i>
+        <input type="search" id="nome" name="nome" placeholder="Procurar pelo nome" class="flex h-10 w-full rounded-md border border-input bg-background py-2 pl-9 pr-3 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
+      </div>
+    </div>
+    <div class="space-y-1.5">
+      {% label for_id="operacao" %}Operação{% endlabel %}
+      <select id="operacao" name="operacao" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <option value="">VIP e TEM</option>
+        <option value="vip">VIP</option>
+        <option value="tem">TEM</option>
+      </select>
+    </div>
+    <div class="flex items-end gap-2 sm:col-span-2 lg:col-span-1">
+      {% button type="submit" class="h-10 px-5" %}Filtrar{% endbutton %}
+      <a href="#" class="inline-flex h-10 shrink-0 items-center justify-center rounded-md border border-input bg-background px-5 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground">Limpar</a>
+    </div>
+  </form>
+
+  {# ===== 5. Botões de recorte (troca a lista) ===== #}
+  <nav class="seg" aria-label="Escolher a lista" data-anim>
+    <a href="#" aria-current="true">Todos <b>48</b></a>
+    <a href="#">Em aberto <b>7</b></a>
+    <a href="#">Respondidos <b>41</b></a>
+  </nav>
+
+  {# ===== 6. Quadro com tabela ===== #}
+  <div class="quadro" data-anim>
+    <div class="quadro-tit">
+      <div>
+        <h2>Por pessoa</h2>
+        <p>Clique no nome para abrir o painel pela esquerda.</p>
+      </div>
+      <span class="tit-lado">Atualizado às 13:42</span>
+    </div>
+    <div class="p-tabela">
+      <table class="min-w-[48rem]">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Empresa</th>
+            <th>Quantidade</th>
+            <th>Índice</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <button type="button" class="pessoa" data-gaveta-abrir="gaveta-exemplo">
+                <span class="ini js-iniciais" data-nome="Ana Souza" aria-hidden="true">A</span><span class="nome-p">Ana Souza</span>
+              </button>
+            </td>
+            <td><span class="chip">VIP</span></td>
+            <td class="b">128</td>
+            <td><span class="cel-indice">78,2%<span class="mini-barra"><i style="--w:78.2%"></i></span></span></td>
+            <td><span class="st pag">Pago</span></td>
+            <td><span class="acoes"><button type="button" class="acao">Editar</button><button type="button" class="acao perigo">Inativar</button></span></td>
+          </tr>
+          <tr>
+            <td>
+              <button type="button" class="pessoa" data-gaveta-abrir="gaveta-exemplo">
+                <span class="ini js-iniciais" data-nome="Bruno Lima" aria-hidden="true">B</span><span class="nome-p">Bruno Lima</span>
+              </button>
+            </td>
+            <td><span class="chip">TEM</span></td>
+            <td class="b">96</td>
+            <td><span class="cel-indice">61,5%<span class="mini-barra"><i style="--w:61.5%"></i></span></span></td>
+            <td><span class="st abe">Em aberto</span></td>
+            <td><span class="acoes"><button type="button" class="acao">Editar</button><button type="button" class="acao perigo">Inativar</button></span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="pessoa fixa"><span class="ini js-iniciais" data-nome="Carla Dias" aria-hidden="true">C</span>Carla Dias</span>
+            </td>
+            <td><span class="chip">VIP</span></td>
+            <td class="b">40</td>
+            <td><span class="vazio">—</span></td>
+            <td><span class="st can">Cancelado</span></td>
+            <td><span class="acoes"><button type="button" class="acao">Editar</button></span></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr><td>Total</td><td></td><td>264</td><td>69,8%</td><td></td><td></td></tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  {# ===== 7. Quadro com conteúdo livre: pilha, legenda e status ===== #}
+  <div class="quadro" data-anim>
+    <div class="quadro-tit">
+      <div class="tit-com-ico">
+        <span class="tit-ico"><i data-lucide="pie-chart"></i></span>
+        <div>
+          <h2>Quadro com ícone</h2>
+          <p>Barra empilhada com legenda.</p>
+        </div>
+      </div>
+    </div>
+    <div class="quadro-corpo">
+      <div class="pilha"><i class="pg" style="--w:62%"></i><i class="ab" style="--w:23%"></i><i class="cc" style="--w:15%"></i></div>
+      <div class="legenda">
+        <span><i class="pt pg"></i>Pagos <b>62%</b></span>
+        <span><i class="pt ab"></i>Abertos <b>23%</b></span>
+        <span><i class="pt cc"></i>Cancelados <b>15%</b></span>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <span class="st ativo">Ativo</span>
+        <span class="st inativo">Inativo</span>
+        <span class="st resp">Respondido</span>
+        <span class="st fec">Fechado</span>
+        <span class="tempo esp">8 min</span>
+        <span class="tempo esp forte">23 min</span>
+        <span class="tempo ok">2 min</span>
+      </div>
+    </div>
+  </div>
+
+  {# ===== 8. Cards de módulo (tela Início) ===== #}
+  <div class="p-grupo">Cards de módulo</div>
+  <div class="resumo-grid">
+    <a class="rc" href="#" data-anim>
+      <div class="rc-topo"><span class="rc-ico"><i data-lucide="messages-square"></i></span><span class="rc-nome">Chats</span><span class="chip">Hoje</span><i data-lucide="arrow-right" class="rc-seta"></i></div>
+      <div class="rc-principal"><span class="rc-num js-contar">312</span><span class="rc-rot">chats distribuídos</span></div>
+      <div class="rc-linha">
+        <div class="rc-item"><b class="js-contar">7</b><span>Em aberto</span></div>
+        <div class="rc-item"><b>4 min</b><span>Tempo médio</span></div>
+      </div>
+    </a>
+    <a class="rc" href="#" data-anim>
+      <div class="rc-topo"><span class="rc-ico"><i data-lucide="percent"></i></span><span class="rc-nome">Índice</span><span class="chip">Hoje</span><i data-lucide="arrow-right" class="rc-seta"></i></div>
+      <div class="rc-principal"><span class="rc-num ok js-contar">64,6%</span><span class="rc-rot">pagos sobre distribuídos</span></div>
+      <div class="barra"><i style="--w:64.6%"></i></div>
+      <div class="rc-linha">
+        <div class="rc-item"><b class="js-contar">312</b><span>Distribuídos</span></div>
+        <div class="rc-item"><b class="js-contar">201</b><span>Pagos</span></div>
+      </div>
+    </a>
+    <a class="rc" href="#" data-anim>
+      <div class="rc-topo"><span class="rc-ico"><i data-lucide="landmark"></i></span><span class="rc-nome">Banco</span><i data-lucide="arrow-right" class="rc-seta"></i></div>
+      <div class="rc-principal"><span class="rc-num ok js-contar">72,6%</span><span class="rc-rot">formalizados em 4 dias</span></div>
+      <div class="barra"><i style="--w:72.6%"></i></div>
+    </a>
+  </div>
+
+  <p class="quadro-vazio">Texto de lista vazia: “Nenhum registro encontrado com os filtros aplicados.”</p>
+</section>
+
+{# ===== 9. Painel pela esquerda: abre com data-gaveta-abrir="gaveta-exemplo" ===== #}
+<dialog id="gaveta-exemplo" class="gaveta-dlg" aria-labelledby="gaveta-exemplo-titulo">
+  <div class="gav-topo">
+    <div class="gav-pessoa">
+      <span class="ini" aria-hidden="true">AS</span>
+      <div class="min-w-0">
+        <h2 id="gaveta-exemplo-titulo">Ana Souza</h2>
+        <p>VIP · últimos 7 dias</p>
+      </div>
+    </div>
+    <button type="button" class="gav-fechar" data-gaveta-fechar aria-label="Fechar"><i data-lucide="x"></i></button>
+    <div class="gav-nums">
+      <div class="gav-num"><b>128</b><span>Atendimentos</span></div>
+      <div class="gav-num"><b>3</b><span>Em aberto</span></div>
+      <div class="gav-num"><b>125</b><span>Fechados</span></div>
+      <div class="gav-num"><b>4 min</b><span>Tempo médio</span></div>
+    </div>
+  </div>
+  <div class="gav-corpo">
+    <table class="dlg-tabela">
+      <thead><tr><th>Horário</th><th>Cliente</th><th>Status</th><th>Tempo</th></tr></thead>
+      <tbody>
+        <tr><td>09:12</td><td>Cliente 1</td><td><span class="st resp">Respondido</span></td><td class="t">02:10</td></tr>
+        <tr class="aberto"><td>10:40</td><td>Cliente 2</td><td><span class="st abe">Em aberto</span></td><td class="t">18:02</td></tr>
+        <tr><td>11:05</td><td>Cliente 3</td><td><span class="st fec">Fechado</span></td><td class="t">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="gav-rodape">
+    <span class="text-sm text-muted-foreground">3 de 128 registros</span>
+    <a href="#" class="gav-csv"><i data-lucide="download"></i>Baixar CSV</a>
+  </div>
+</dialog>
+{% endblock %}
