@@ -28,17 +28,19 @@ python exemplo/gerar.py
 
 ## Usar num projeto Django
 
-**1. Instalar.** Instale as duas bibliotecas. Enquanto este repositório não estiver no GitHub, use o caminho da pasta:
+**1. Instalar.** Ponha as duas bibliotecas no `requirements.txt` do projeto:
 
 ```
-pip install "django-shadcn @ git+https://github.com/leandro-vip/biblioteca-identidade-visual.git"
+django-shadcn @ git+https://github.com/leandro-vip/biblioteca-identidade-visual.git
+painel-vip @ git+https://github.com/devruthc/biblioteca-identidade-visual-vip-.git
+```
+
+Para travar uma versão, acrescente `@<commit>` no fim do link (igual ao django-shadcn no Dashboard Formalização). Se o repositório for privado, quem instala precisa ter acesso a ele no GitHub.
+
+Para testar mudanças na biblioteca sem subir para o GitHub, instale direto da pasta:
+
+```
 pip install -e C:/Users/VIP-2065/Documents/painel-vip
-```
-
-Depois que subir para o GitHub, no `requirements.txt`:
-
-```
-painel-vip @ git+https://github.com/SEU-USUARIO/painel-vip.git@<commit>
 ```
 
 **2. Ligar no `settings.py`.**
@@ -140,11 +142,8 @@ O `painel.css` também traz algumas peças feitas para telas específicas do das
 
 Quando o visual do Dashboard Formalização mudar, copie de novo `painel.css`, `painel.js` e `shadcn.css` (pasta `dashboard_atendimentos/static/`), rode `python exemplo/gerar.py`, aumente a `version` no `pyproject.toml` e faça um commit.
 
-## Subir para o GitHub
+## Repositório
 
-Crie um repositório vazio chamado `painel-vip` no GitHub e rode, dentro desta pasta:
+https://github.com/devruthc/biblioteca-identidade-visual-vip-
 
-```
-git remote add origin https://github.com/SEU-USUARIO/painel-vip.git
-git push -u origin main
-```
+Depois de mudar algo aqui, faça o commit e rode `git push` para subir.
